@@ -147,16 +147,49 @@
                     <span>Gmail API</span>
                     <span>Google Sheets</span>
                 </div>
-                <p><strong>Задача:</strong> Компания вручную обрабатывала заявки на аренду. На каждую тратили ~15 минут.</p>
+                
+                <p><strong>Задача:</strong> Компания «Ритейл Логистик» вручную обрабатывала заявки на аренду помещений. На каждую заявку тратили ~15 минут.</p>
+                
                 <div class="result">
                     <strong>📊 Результат:</strong> Создана полностью автоматическая система:<br>
-                    • Клиент заполняет форму → данные в n8n → AI генерирует письмо → письмо отправляется<br>
-                    • Менеджер получает уведомление на почту<br>
-                    • Все заявки сохраняются в Google Sheets<br>
-                    • <strong>Время обработки сокращено до 30 секунд</strong>
+                    • Клиент заполняет форму → данные в n8n → AI генерирует персонализированное письмо → письмо отправляется<br>
+                    • Менеджер получает мгновенное уведомление на почту<br>
+                    • Все заявки автоматически сохраняются в Google Sheets<br>
+                    • <strong>Время обработки сокращено с 15 минут до 30 секунд</strong>
+                </div>
+
+                <!-- БЛОК С ТЕСТОВОЙ ФОРМОЙ -->
+                <div style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center;">
+                    <div style="font-size: 2em; margin-bottom: 10px;">🎯</div>
+                    <h4 style="margin: 0 0 10px 0; color: #166534;">Хотите увидеть, как это работает?</h4>
+                    <p style="margin-bottom: 15px;">Перейдите по ссылке и заполните тестовую форму. Через 1-2 минуты вы получите письмо, сгенерированное искусственным интеллектом.</p>
+                    <a href="https://a48595.webask.io/911d3d1d0" target="_blank" class="button" style="background: #22c55e; font-size: 1.1em;">🔗 Протестировать автоматизацию</a>
+                    <p style="font-size: 0.85em; color: #666; margin-top: 12px;">✨ Данные никуда не сохраняются. Это только демонстрация.</p>
+                </div>
+
+                 <!-- СКРИНШОТЫ -->
+                <h4 style="margin: 25px 0 15px 0;">📸 Как это работает:</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <img src="images/workflow.png" alt="Схема workflow в n8n" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">1. Схема автоматизации в n8n</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <img src="images/email_klient.png" alt="Письмо клиенту" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">2. Письмо, которое получает клиент</p>
+                    </div>
+                </div>
+                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
+                    <div style="flex: 1; min-width: 200px;">
+                        <img src="images/email_manager.png" alt="Уведомление менеджера" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">3. Уведомление, которое получает менеджер</p>
+                    </div>
+                    <div style="flex: 1; min-width: 200px;">
+                        <img src="images/sheets.png" alt="Google Sheets" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">4. Логирование в Google Sheets</p>
+                    </div>
                 </div>
             </div>
-
         </div>
 
         <div class="section">
