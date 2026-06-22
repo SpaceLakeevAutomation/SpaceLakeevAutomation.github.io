@@ -483,22 +483,31 @@
             margin-bottom: 16px;
         }
 
-        /* ─── CAROUSEL ─── */
+        /* ─── CAROUSEL (vertical) ─── */
         .carousel {
-            position: relative;
+            display: flex;
             border-radius: 16px;
             overflow: hidden;
             border: 1px solid var(--border);
             background: rgba(255,255,255,0.02);
             user-select: none;
         }
+        .carousel-main {
+            flex: 1;
+            position: relative;
+        }
+        .carousel-viewport {
+            overflow: hidden;
+            /* height set by JS after images load */
+        }
         .carousel-track {
             display: flex;
+            flex-direction: column;
             transition: transform 0.45s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .carousel-slide {
-            min-width: 100%;
             flex-shrink: 0;
+            width: 100%;
         }
         .carousel-slide img {
             width: 100%;
@@ -512,52 +521,56 @@
             border-top: 1px solid var(--border);
             background: rgba(0,0,0,0.25);
         }
+        /* Up / Down buttons */
         .carousel-btn {
             position: absolute;
-            top: calc(50% - 18px);
-            transform: translateY(-50%);
-            background: rgba(9,9,15,0.75);
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(9,9,15,0.78);
             border: 1px solid var(--border);
             color: var(--text);
             width: 40px; height: 40px;
             border-radius: 50%;
             cursor: pointer;
-            font-size: 1.1em;
+            font-size: 1.05em;
             display: flex;
             align-items: center;
             justify-content: center;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             transition: background 0.2s, border-color 0.2s, transform 0.15s;
             z-index: 2;
         }
         .carousel-btn:hover {
             background: rgba(124,58,237,0.35);
-            border-color: rgba(124,58,237,0.5);
-            transform: translateY(-50%) scale(1.08);
+            border-color: rgba(124,58,237,0.55);
+            transform: translateX(-50%) scale(1.1);
         }
-        .carousel-prev { left: 14px; }
-        .carousel-next { right: 14px; }
-        .carousel-footer {
+        .carousel-prev { top: 12px; }
+        .carousel-next { bottom: 12px; }
+        /* Right-side dot strip */
+        .carousel-sidebar {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 8px;
-            padding: 14px;
-            border-top: 1px solid var(--border);
-            background: rgba(0,0,0,0.2);
+            padding: 0 14px;
+            min-width: 44px;
+            border-left: 1px solid var(--border);
+            background: rgba(0,0,0,0.12);
         }
         .carousel-dot {
-            height: 6px;
             width: 6px;
+            height: 6px;
             border-radius: 3px;
             background: var(--text-muted);
             cursor: pointer;
-            transition: background 0.25s, width 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            transition: background 0.25s, height 0.3s cubic-bezier(0.25, 1, 0.5, 1);
         }
         .carousel-dot.active {
             background: #a78bfa;
-            width: 22px;
+            height: 22px;
         }
 
         /* ─── TECH GRID ─── */
@@ -833,27 +846,31 @@
 
                 <p class="screenshots-label">📸 Как это работает</p>
                 <div class="carousel" id="projectCarousel">
-                    <div class="carousel-track">
-                        <div class="carousel-slide">
-                            <img src="images/workflow.png" alt="Схема workflow в n8n">
-                            <div class="carousel-caption">1. Схема автоматизации в n8n</div>
+                    <div class="carousel-main">
+                        <div class="carousel-viewport">
+                            <div class="carousel-track">
+                                <div class="carousel-slide">
+                                    <img src="images/workflow.png" alt="Схема workflow в n8n">
+                                    <div class="carousel-caption">1. Схема автоматизации в n8n</div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/email_klient.png" alt="Письмо клиенту">
+                                    <div class="carousel-caption">2. Письмо, которое получает клиент</div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/email_menager.png" alt="Уведомление менеджера">
+                                    <div class="carousel-caption">3. Уведомление для менеджера</div>
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/sheets.png" alt="Google Sheets">
+                                    <div class="carousel-caption">4. Логирование в Google Sheets</div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="carousel-slide">
-                            <img src="images/email_klient.png" alt="Письмо клиенту">
-                            <div class="carousel-caption">2. Письмо, которое получает клиент</div>
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/email_menager.png" alt="Уведомление менеджера">
-                            <div class="carousel-caption">3. Уведомление для менеджера</div>
-                        </div>
-                        <div class="carousel-slide">
-                            <img src="images/sheets.png" alt="Google Sheets">
-                            <div class="carousel-caption">4. Логирование в Google Sheets</div>
-                        </div>
+                        <button class="carousel-btn carousel-prev" aria-label="Вверх">&#8593;</button>
+                        <button class="carousel-btn carousel-next" aria-label="Вниз">&#8595;</button>
                     </div>
-                    <button class="carousel-btn carousel-prev" aria-label="Назад">&#8592;</button>
-                    <button class="carousel-btn carousel-next" aria-label="Вперёд">&#8594;</button>
-                    <div class="carousel-footer">
+                    <div class="carousel-sidebar">
                         <span class="carousel-dot active"></span>
                         <span class="carousel-dot"></span>
                         <span class="carousel-dot"></span>
@@ -941,31 +958,47 @@
         navbar.classList.toggle('scrolled', window.scrollY > 50);
     }, { passive: true });
 
-    // Carousel
+    // Carousel — vertical
     (function () {
         const carousel = document.getElementById('projectCarousel');
         if (!carousel) return;
-        const track = carousel.querySelector('.carousel-track');
-        const slides = carousel.querySelectorAll('.carousel-slide');
-        const dots = carousel.querySelectorAll('.carousel-dot');
+        const viewport = carousel.querySelector('.carousel-viewport');
+        const track    = carousel.querySelector('.carousel-track');
+        const slides   = carousel.querySelectorAll('.carousel-slide');
+        const dots     = carousel.querySelectorAll('.carousel-dot');
         let current = 0;
+
+        function slideH() { return slides[0] ? slides[0].offsetHeight : 0; }
+
+        function applyHeight() {
+            const h = slideH();
+            if (h) viewport.style.height = h + 'px';
+        }
 
         function goTo(idx) {
             current = (idx + slides.length) % slides.length;
-            track.style.transform = `translateX(-${current * 100}%)`;
+            track.style.transform = `translateY(-${current * slideH()}px)`;
             dots.forEach((d, i) => d.classList.toggle('active', i === current));
         }
+
+        // Sync height when images finish loading
+        const imgs = carousel.querySelectorAll('img');
+        let loaded = 0;
+        function onLoad() { if (++loaded >= imgs.length) { applyHeight(); goTo(0); } }
+        imgs.forEach(img => img.complete ? onLoad() : img.addEventListener('load', onLoad));
+        setTimeout(applyHeight, 120); // fallback for cached images
+        window.addEventListener('resize', () => { applyHeight(); goTo(current); });
 
         carousel.querySelector('.carousel-prev').addEventListener('click', () => goTo(current - 1));
         carousel.querySelector('.carousel-next').addEventListener('click', () => goTo(current + 1));
         dots.forEach((dot, i) => dot.addEventListener('click', () => goTo(i)));
 
-        // Swipe support
-        let startX = 0;
-        track.addEventListener('pointerdown', e => { startX = e.clientX; });
-        track.addEventListener('pointerup', e => {
-            const dx = e.clientX - startX;
-            if (Math.abs(dx) > 40) goTo(dx < 0 ? current + 1 : current - 1);
+        // Vertical swipe / drag
+        let startY = 0;
+        track.addEventListener('pointerdown', e => { startY = e.clientY; });
+        track.addEventListener('pointerup',   e => {
+            const dy = e.clientY - startY;
+            if (Math.abs(dy) > 40) goTo(dy < 0 ? current + 1 : current - 1);
         });
     })();
 
