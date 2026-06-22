@@ -702,6 +702,67 @@
         .reveal-d2 { transition-delay: 0.16s; }
         .reveal-d3 { transition-delay: 0.24s; }
 
+        /* ─── WORKFLOW DIAGRAM ─── */
+        .workflow-wrap { margin-bottom: 28px; }
+        .workflow-diagram {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow-x: auto;
+            padding: 8px 4px;
+        }
+        .workflow-diagram svg {
+            display: block;
+            width: 100%;
+            min-width: 560px;
+        }
+        .wf-node {
+            opacity: 0;
+            transform-box: fill-box;
+            transform-origin: center;
+        }
+        .wf-line {
+            stroke: rgba(124,58,237,0.65);
+            stroke-width: 1.5;
+            fill: none;
+            stroke-linecap: round;
+        }
+        .wf-line-cyan  { stroke: rgba(6,182,212,0.65); }
+        .wf-line-green { stroke: rgba(16,185,129,0.65); }
+        .wf-text-main {
+            font-family: 'Inter', sans-serif;
+            font-size: 10.5px;
+            font-weight: 600;
+            fill: #ddd6fe;
+        }
+        .wf-text-out   { font-family: 'Inter', sans-serif; font-size: 10.5px; font-weight: 600; fill: #a5f3fc; }
+        .wf-text-green { fill: #6ee7b7; }
+
+        @keyframes wfNodeIn {
+            0%   { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+        @keyframes wfLineDraw { to { stroke-dashoffset: 0; } }
+        @keyframes wfDotIn    { from { opacity: 0; } to { opacity: 1; } }
+
+        #workflowSvg.play .wf-node { animation: wfNodeIn 0.45s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+        #workflowSvg.play .wf-line { animation: wfLineDraw 0.35s ease forwards; }
+        #workflowSvg.play #wfjunc  { animation: wfDotIn 0.3s ease 2.85s forwards; }
+
+        #workflowSvg.play #wfn1 { animation-delay: 0.1s; }
+        #workflowSvg.play #wfl1 { animation-delay: 0.6s; }
+        #workflowSvg.play #wfn2 { animation-delay: 1.05s; }
+        #workflowSvg.play #wfl2 { animation-delay: 1.5s; }
+        #workflowSvg.play #wfn3 { animation-delay: 1.95s; }
+        #workflowSvg.play #wfl3 { animation-delay: 2.45s; }
+        #workflowSvg.play #wfl4 { animation-delay: 2.85s; animation-duration: 0.5s; }
+        #workflowSvg.play #wfl5 { animation-delay: 3.15s; }
+        #workflowSvg.play #wfl6 { animation-delay: 3.25s; }
+        #workflowSvg.play #wfl7 { animation-delay: 3.35s; }
+        #workflowSvg.play #wfn4 { animation-delay: 3.5s; }
+        #workflowSvg.play #wfn5 { animation-delay: 3.65s; }
+        #workflowSvg.play #wfn6 { animation-delay: 3.8s; }
+
         /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
             .nav-links { display: none; }
@@ -833,6 +894,95 @@
                     </ul>
                     <div class="result-highlight">
                         ⚡ Время обработки сокращено с 15 минут до 30 секунд
+                    </div>
+                </div>
+
+                <!-- WORKFLOW DIAGRAM -->
+                <div class="workflow-wrap" id="workflowWrap">
+                    <p class="screenshots-label" style="margin-bottom:16px;">⚙️ Схема автоматизации</p>
+                    <div class="workflow-diagram">
+                        <svg id="workflowSvg" viewBox="0 0 755 250" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <linearGradient id="wfg1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#7c3aed" stop-opacity="0.3"/>
+                                    <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.14"/>
+                                </linearGradient>
+                                <linearGradient id="wfg2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#06b6d4" stop-opacity="0.24"/>
+                                    <stop offset="100%" stop-color="#4f46e5" stop-opacity="0.1"/>
+                                </linearGradient>
+                                <linearGradient id="wfg3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#10b981" stop-opacity="0.24"/>
+                                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0.1"/>
+                                </linearGradient>
+                            </defs>
+
+                            <!-- connector lines -->
+                            <line id="wfl1" class="wf-line"            x1="157" y1="133" x2="205" y2="133" stroke-dasharray="48"  stroke-dashoffset="48"/>
+                            <line id="wfl2" class="wf-line"            x1="307" y1="133" x2="353" y2="133" stroke-dasharray="46"  stroke-dashoffset="46"/>
+                            <line id="wfl3" class="wf-line"            x1="485" y1="133" x2="525" y2="133" stroke-dasharray="40"  stroke-dashoffset="40"/>
+                            <line id="wfl4" class="wf-line"            x1="525" y1="55"  x2="525" y2="211" stroke-dasharray="156" stroke-dashoffset="156"/>
+                            <line id="wfl5" class="wf-line wf-line-cyan"  x1="525" y1="55"  x2="558" y2="55"  stroke-dasharray="33"  stroke-dashoffset="33"/>
+                            <line id="wfl6" class="wf-line wf-line-cyan"  x1="525" y1="133" x2="558" y2="133" stroke-dasharray="33"  stroke-dashoffset="33"/>
+                            <line id="wfl7" class="wf-line wf-line-green" x1="525" y1="211" x2="558" y2="211" stroke-dasharray="33"  stroke-dashoffset="33"/>
+                            <circle id="wfjunc" cx="525" cy="133" r="4" fill="#7c3aed" opacity="0"/>
+
+                            <!-- main nodes -->
+                            <g id="wfn1" class="wf-node">
+                                <rect x="10"  y="107" width="147" height="52" rx="10" fill="url(#wfg1)" stroke="rgba(124,58,237,0.45)" stroke-width="1.5"/>
+                                <text x="83"  y="123" text-anchor="middle" font-size="16" font-family="sans-serif">📝</text>
+                                <text x="83"  y="143" text-anchor="middle" class="wf-text-main">Форма WebAsk</text>
+                            </g>
+                            <g id="wfn2" class="wf-node">
+                                <rect x="205" y="107" width="102" height="52" rx="10" fill="url(#wfg1)" stroke="rgba(124,58,237,0.5)"  stroke-width="1.5"/>
+                                <text x="256" y="123" text-anchor="middle" font-size="16" font-family="sans-serif">⚡</text>
+                                <text x="256" y="143" text-anchor="middle" class="wf-text-main">n8n</text>
+                            </g>
+                            <g id="wfn3" class="wf-node">
+                                <rect x="353" y="107" width="132" height="52" rx="10" fill="url(#wfg1)" stroke="rgba(167,139,250,0.5)" stroke-width="1.5"/>
+                                <text x="419" y="123" text-anchor="middle" font-size="16" font-family="sans-serif">🤖</text>
+                                <text x="419" y="143" text-anchor="middle" class="wf-text-main">AI Mistral</text>
+                            </g>
+
+                            <!-- output nodes -->
+                            <g id="wfn4" class="wf-node">
+                                <rect x="558" y="29"  width="183" height="52" rx="10" fill="url(#wfg2)" stroke="rgba(6,182,212,0.45)"  stroke-width="1.5"/>
+                                <text x="649" y="45"  text-anchor="middle" font-size="16" font-family="sans-serif">📧</text>
+                                <text x="649" y="65"  text-anchor="middle" class="wf-text-out">Письмо клиенту</text>
+                            </g>
+                            <g id="wfn5" class="wf-node">
+                                <rect x="558" y="107" width="183" height="52" rx="10" fill="url(#wfg2)" stroke="rgba(6,182,212,0.45)"  stroke-width="1.5"/>
+                                <text x="649" y="123" text-anchor="middle" font-size="16" font-family="sans-serif">🔔</text>
+                                <text x="649" y="143" text-anchor="middle" class="wf-text-out">Уведомление</text>
+                            </g>
+                            <g id="wfn6" class="wf-node">
+                                <rect x="558" y="185" width="183" height="52" rx="10" fill="url(#wfg3)" stroke="rgba(16,185,129,0.45)" stroke-width="1.5"/>
+                                <text x="649" y="201" text-anchor="middle" font-size="16" font-family="sans-serif">📊</text>
+                                <text x="649" y="221" text-anchor="middle" class="wf-text-main wf-text-green">Google Sheets</text>
+                            </g>
+
+                            <!-- flowing dots (SMIL, started by JS) -->
+                            <circle class="wf-flow" r="3.5" fill="#c4b5fd" opacity="0">
+                                <animateMotion class="wf-dot-anim" path="M157,133 H205"               dur="0.45s" begin="indefinite" repeatCount="indefinite"/>
+                                <animate       class="wf-dot-anim" attributeName="opacity" values="0;1;1;0" dur="0.45s" begin="indefinite" repeatCount="indefinite"/>
+                            </circle>
+                            <circle class="wf-flow" r="3.5" fill="#c4b5fd" opacity="0">
+                                <animateMotion class="wf-dot-anim" path="M307,133 H353"               dur="0.42s" begin="indefinite" repeatCount="indefinite"/>
+                                <animate       class="wf-dot-anim" attributeName="opacity" values="0;1;1;0" dur="0.42s" begin="indefinite" repeatCount="indefinite"/>
+                            </circle>
+                            <circle class="wf-flow" r="3.5" fill="#67e8f9" opacity="0">
+                                <animateMotion class="wf-dot-anim" path="M485,133 H525 V55 H558"      dur="1.1s"  begin="indefinite" repeatCount="indefinite"/>
+                                <animate       class="wf-dot-anim" attributeName="opacity" values="0;1;1;0" dur="1.1s"  begin="indefinite" repeatCount="indefinite"/>
+                            </circle>
+                            <circle class="wf-flow" r="3.5" fill="#67e8f9" opacity="0">
+                                <animateMotion class="wf-dot-anim" path="M485,133 H558"               dur="0.6s"  begin="indefinite" repeatCount="indefinite"/>
+                                <animate       class="wf-dot-anim" attributeName="opacity" values="0;1;1;0" dur="0.6s"  begin="indefinite" repeatCount="indefinite"/>
+                            </circle>
+                            <circle class="wf-flow" r="3.5" fill="#6ee7b7" opacity="0">
+                                <animateMotion class="wf-dot-anim" path="M485,133 H525 V211 H558"     dur="1.1s"  begin="indefinite" repeatCount="indefinite"/>
+                                <animate       class="wf-dot-anim" attributeName="opacity" values="0;1;1;0" dur="1.1s"  begin="indefinite" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
                     </div>
                 </div>
 
@@ -1013,6 +1163,27 @@
         });
     }, { threshold: 0.1 });
     reveals.forEach(el => observer.observe(el));
+
+    // Workflow diagram — trigger on viewport entry
+    (function () {
+        const wrap = document.getElementById('workflowWrap');
+        const svg  = document.getElementById('workflowSvg');
+        if (!wrap || !svg) return;
+        let played = false;
+        new IntersectionObserver(entries => {
+            if (played || !entries[0].isIntersecting) return;
+            played = true;
+            svg.classList.add('play');
+            // After initial animation (~4s), start flowing dots with stagger
+            setTimeout(() => {
+                svg.querySelectorAll('.wf-flow').forEach((circle, i) => {
+                    setTimeout(() => {
+                        circle.querySelectorAll('.wf-dot-anim').forEach(a => a.beginElement && a.beginElement());
+                    }, i * 200);
+                });
+            }, 4000);
+        }, { threshold: 0.35 }).observe(wrap);
+    })();
 </script>
 </body>
 </html>
