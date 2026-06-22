@@ -4,226 +4,894 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Александр | Автоматизация на n8n</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #09090f;
+            --bg-2: #0f0f1a;
+            --bg-card: rgba(255,255,255,0.04);
+            --border: rgba(255,255,255,0.08);
+            --text: #e8e8f0;
+            --text-muted: #7878a0;
+            --purple: #7c3aed;
+            --indigo: #4f46e5;
+            --cyan: #06b6d4;
+            --green: #10b981;
+            --gradient: linear-gradient(135deg, #7c3aed, #4f46e5, #06b6d4);
         }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background: #f5f7fa;
-            padding: 20px;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.7;
         }
+
+        /* Ambient background glow */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 15% -5%, rgba(124,58,237,0.18) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 85% 105%, rgba(6,182,212,0.12) 0%, transparent 55%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Grid dot texture */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
         .container {
-            max-width: 1200px;
+            max-width: 1080px;
             margin: 0 auto;
+            padding: 0 24px;
+            position: relative;
+            z-index: 1;
         }
-        header {
-            text-align: center;
-            padding: 60px 20px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+        /* ─── NAVBAR ─── */
+        nav {
+            position: fixed;
+            top: 0; left: 0; right: 0;
+            z-index: 100;
+            padding: 18px 0;
+            transition: background 0.4s, backdrop-filter 0.4s, border-color 0.4s;
+            border-bottom: 1px solid transparent;
+        }
+        nav.scrolled {
+            background: rgba(9,9,15,0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom-color: var(--border);
+        }
+        .nav-inner {
+            max-width: 1080px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .nav-logo {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-weight: 800;
+            font-size: 1.1em;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.01em;
+        }
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.88em;
+            font-weight: 500;
+            transition: color 0.2s;
+            letter-spacing: 0.01em;
+        }
+        .nav-links a:hover { color: var(--text); }
+
+        /* ─── HERO ─── */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 0 80px;
+        }
+        .hero-content { max-width: 680px; }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(124,58,237,0.12);
+            border: 1px solid rgba(124,58,237,0.28);
+            padding: 7px 18px;
+            border-radius: 100px;
+            font-size: 0.82em;
+            font-weight: 500;
+            color: #c4b5fd;
+            margin-bottom: 32px;
+        }
+        .badge-dot {
+            width: 6px; height: 6px;
+            background: #a78bfa;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.4); }
+        }
+
+        .hero h1 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(3em, 6.5vw, 5em);
+            font-weight: 800;
+            line-height: 1.06;
+            letter-spacing: -0.03em;
+            margin-bottom: 28px;
+        }
+        .gradient-text {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-desc {
+            font-size: 1.12em;
+            color: var(--text-muted);
+            max-width: 520px;
+            margin-bottom: 44px;
+            line-height: 1.75;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
             color: white;
-            border-radius: 20px;
-            margin-bottom: 40px;
-        }
-        header h1 {
-            font-size: 3em;
-            margin-bottom: 20px;
-        }
-        header p {
-            font-size: 1.2em;
-            opacity: 0.9;
-        }
-        .section {
-            background: white;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-        }
-        .section h2 {
-            color: #667eea;
-            border-bottom: 2px solid #e0e7ff;
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-        }
-        .project-card {
-            border: 1px solid #e0e7ff;
+            padding: 14px 28px;
             border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.93em;
+            box-shadow: 0 0 32px rgba(124,58,237,0.35), 0 4px 16px rgba(0,0,0,0.3);
             transition: transform 0.2s, box-shadow 0.2s;
         }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 48px rgba(124,58,237,0.55), 0 8px 24px rgba(0,0,0,0.35);
+        }
+
+        .btn-outline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid var(--border);
+            color: var(--text);
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.93em;
+            backdrop-filter: blur(10px);
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        }
+        .btn-outline:hover {
+            border-color: rgba(124,58,237,0.45);
+            background: rgba(124,58,237,0.08);
+            transform: translateY(-2px);
+        }
+
+        /* Stats */
+        .hero-stats {
+            display: flex;
+            gap: 52px;
+            margin-top: 72px;
+            padding-top: 48px;
+            border-top: 1px solid var(--border);
+            flex-wrap: wrap;
+        }
+        .stat .num {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 2.4em;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+        .stat .label {
+            font-size: 0.82em;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        /* ─── SECTION HEADERS ─── */
+        section { padding: 88px 0; }
+
+        .label-tag {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: #a78bfa;
+            margin-bottom: 14px;
+        }
+        .section-title {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(1.9em, 4vw, 2.6em);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            line-height: 1.15;
+            margin-bottom: 18px;
+        }
+        .section-sub {
+            color: var(--text-muted);
+            font-size: 1.02em;
+            max-width: 560px;
+            margin-bottom: 52px;
+        }
+
+        /* ─── ABOUT CARDS ─── */
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 28px 32px;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s, transform 0.3s;
+        }
+        .about-card:hover {
+            border-color: rgba(124,58,237,0.3);
+            transform: translateY(-3px);
+        }
+        .about-card:first-child { grid-column: 1 / -1; }
+        .about-icon {
+            font-size: 1.8em;
+            margin-bottom: 16px;
+            display: block;
+        }
+        .about-card h3 {
+            font-weight: 700;
+            font-size: 1.05em;
+            margin-bottom: 10px;
+        }
+        .about-card p {
+            color: var(--text-muted);
+            font-size: 0.93em;
+            line-height: 1.75;
+        }
+
+        /* ─── PROJECT CARD ─── */
+        .project-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            overflow: hidden;
+            backdrop-filter: blur(12px);
+            transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+        }
         .project-card:hover {
+            border-color: rgba(124,58,237,0.35);
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(124,58,237,0.15);
         }
-        .project-card h3 {
-            color: #333;
-            margin-bottom: 15px;
-            font-size: 1.5em;
+
+        .project-header {
+            padding: 40px 40px 32px;
+            background: linear-gradient(135deg, rgba(124,58,237,0.14) 0%, rgba(6,182,212,0.06) 100%);
+            border-bottom: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
         }
-        .project-card .tech {
+        .project-header::before {
+            content: '';
+            position: absolute;
+            top: -60px; right: -60px;
+            width: 200px; height: 200px;
+            background: radial-gradient(circle, rgba(124,58,237,0.2), transparent 70%);
+        }
+        .project-num {
+            font-size: 0.78em;
+            font-weight: 700;
+            color: #a78bfa;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 14px;
+        }
+        .project-header h3 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.65em;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            position: relative;
+        }
+
+        .project-body { padding: 40px; }
+
+        .tag-row {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin: 15px 0;
+            margin-bottom: 28px;
         }
-        .project-card .tech span {
-            background: #e0e7ff;
-            color: #4f46e5;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85em;
+        .tag {
+            background: rgba(124,58,237,0.14);
+            border: 1px solid rgba(124,58,237,0.22);
+            color: #c4b5fd;
+            padding: 5px 14px;
+            border-radius: 100px;
+            font-size: 0.78em;
+            font-weight: 600;
+            letter-spacing: 0.01em;
         }
-        .result {
-            background: #f0fdf4;
-            border-left: 4px solid #22c55e;
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 8px;
+
+        .task-text {
+            color: var(--text-muted);
+            margin-bottom: 28px;
+            font-size: 0.95em;
+            line-height: 1.8;
         }
-        .button {
-            display: inline-block;
-            background: #667eea;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 0.9em;
-            transition: background 0.2s;
+        .task-text strong { color: var(--text); }
+
+        /* Result */
+        .result-block {
+            background: rgba(16,185,129,0.07);
+            border: 1px solid rgba(16,185,129,0.18);
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 28px;
         }
-        .button:hover {
-            background: #5a67d8;
-        }
-        footer {
-            text-align: center;
-            padding: 40px;
-            color: #666;
-            border-top: 1px solid #e0e7ff;
-        }
-        .contact-links {
+        .result-heading {
             display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-top: 20px;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            color: #10b981;
+            margin-bottom: 18px;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
-        .contact-links a {
-            color: #667eea;
+        .result-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .result-list li {
+            display: flex;
+            gap: 12px;
+            color: var(--text-muted);
+            font-size: 0.93em;
+            line-height: 1.6;
+        }
+        .result-list li::before {
+            content: '→';
+            color: #10b981;
+            flex-shrink: 0;
+            font-weight: 700;
+            margin-top: 1px;
+        }
+        .result-highlight {
+            margin-top: 18px;
+            background: rgba(16,185,129,0.14);
+            border-radius: 10px;
+            padding: 14px 18px;
+            font-weight: 700;
+            color: #34d399;
+            font-size: 0.93em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Demo CTA */
+        .demo-block {
+            background: linear-gradient(135deg, rgba(124,58,237,0.1), rgba(6,182,212,0.05));
+            border: 1px solid rgba(124,58,237,0.22);
+            border-radius: 18px;
+            padding: 32px;
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .demo-emoji { font-size: 2.2em; margin-bottom: 12px; display: block; }
+        .demo-block h4 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 1.15em;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .demo-block p {
+            color: var(--text-muted);
+            font-size: 0.9em;
+            max-width: 420px;
+            margin: 0 auto 22px;
+            line-height: 1.7;
+        }
+        .btn-demo {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 13px 26px;
+            border-radius: 12px;
             text-decoration: none;
+            font-weight: 700;
+            font-size: 0.93em;
+            box-shadow: 0 0 28px rgba(16,185,129,0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+        .btn-demo:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 44px rgba(16,185,129,0.5);
+        }
+        .demo-note {
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-top: 14px;
+        }
+
+        /* Screenshots */
+        .screenshots-label {
+            font-size: 0.8em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+        }
+        .screenshots-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+        .screenshot-item {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            transition: border-color 0.25s, transform 0.25s;
+        }
+        .screenshot-item:hover {
+            border-color: rgba(124,58,237,0.3);
+            transform: scale(1.02);
+        }
+        .screenshot-item img {
+            width: 100%;
+            display: block;
+        }
+        .screenshot-caption {
+            padding: 10px 14px;
+            font-size: 0.78em;
+            color: var(--text-muted);
+            text-align: center;
+            border-top: 1px solid var(--border);
+        }
+
+        /* ─── TECH GRID ─── */
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 10px;
+        }
+        .tech-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+            font-size: 0.87em;
+            font-weight: 600;
+            cursor: default;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s, box-shadow 0.2s;
+        }
+        .tech-item:hover {
+            border-color: rgba(124,58,237,0.4);
+            background: rgba(124,58,237,0.08);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(124,58,237,0.15);
+        }
+
+        /* ─── CTA BOX ─── */
+        .cta-box {
+            background: linear-gradient(135deg, rgba(124,58,237,0.13) 0%, rgba(6,182,212,0.06) 100%);
+            border: 1px solid rgba(124,58,237,0.2);
+            border-radius: 28px;
+            padding: 72px 56px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .cta-box::before {
+            content: '';
+            position: absolute;
+            top: -80px; left: 50%;
+            transform: translateX(-50%);
+            width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(124,58,237,0.14), transparent 65%);
+            pointer-events: none;
+        }
+        .cta-box h2 {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: clamp(1.7em, 4vw, 2.3em);
+            font-weight: 800;
+            letter-spacing: -0.025em;
+            margin-bottom: 16px;
+            position: relative;
+        }
+        .cta-box p {
+            color: var(--text-muted);
+            font-size: 1.05em;
+            max-width: 440px;
+            margin: 0 auto 36px;
+            position: relative;
+        }
+        .btn-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #7c3aed, #4f46e5);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 14px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1em;
+            box-shadow: 0 0 40px rgba(124,58,237,0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(124,58,237,0.6);
+        }
+
+        /* ─── CONTACTS ─── */
+        .contact-cards {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .contact-card {
+            flex: 1;
+            min-width: 220px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 26px 30px;
+            text-decoration: none;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+        }
+        .contact-card:hover {
+            border-color: rgba(124,58,237,0.4);
+            background: rgba(124,58,237,0.07);
+            transform: translateY(-3px);
+        }
+        .contact-card .c-icon { font-size: 2em; flex-shrink: 0; }
+        .contact-card .c-title { font-weight: 700; font-size: 0.95em; }
+        .contact-card .c-sub { color: var(--text-muted); font-size: 0.83em; margin-top: 3px; }
+
+        /* ─── FOOTER ─── */
+        footer {
+            border-top: 1px solid var(--border);
+            padding: 36px 0;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.83em;
+            line-height: 1.8;
+        }
+
+        /* ─── SCROLL REVEAL ─── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+                        transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-d1 { transition-delay: 0.08s; }
+        .reveal-d2 { transition-delay: 0.16s; }
+        .reveal-d3 { transition-delay: 0.24s; }
+
+        /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            header h1 { font-size: 2em; }
-            .section { padding: 20px; }
+            .nav-links { display: none; }
+            .hero-stats { gap: 28px; }
+            .about-grid { grid-template-columns: 1fr; }
+            .about-card:first-child { grid-column: 1; }
+            .screenshots-grid { grid-template-columns: 1fr; }
+            .project-header { padding: 28px; }
+            .project-body { padding: 28px; }
+            .cta-box { padding: 44px 28px; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Александр</h1>
-            <p>Автоматизация бизнес-процессов на n8n</p>
-            <p style="margin-top: 15px;">Превращаю рутину в автоматические процессы с помощью AI</p>
-        </header>
 
-        <div class="section">
-            <h2>📌 Обо мне</h2>
-            <p>Я специалист по автоматизации. Моя задача — находить повторяющиеся ручные задачи и создавать системы, которые работают без участия человека. Использую современные технологии: n8n, API, AI (OpenRouter, ChatGPT), Telegram, Google Sheets, Gmail.</p>
-            <p style="margin-top: 15px;">Мой подход — сначала понять бизнес-процесс клиента, затем предложить оптимальное решение, которое экономит время и деньги.</p>
-        </div>
-
-        <div class="section">
-            <h2>🚀 Мои проекты</h2>
-
-            <div class="project-card">
-                <h3>📋 Автоматизация обработки заявок на аренду</h3>
-                <div class="tech">
-                    <span>n8n</span>
-                    <span>WebAsk</span>
-                    <span>OpenRouter (Mistral)</span>
-                    <span>Gmail API</span>
-                    <span>Google Sheets</span>
-                </div>
-                
-                <p><strong>Задача:</strong> Компания «Ритейл Логистик» вручную обрабатывала заявки на аренду помещений. На каждую заявку тратили ~15 минут.</p>
-                
-                <div class="result">
-                    <strong>📊 Результат:</strong> Создана полностью автоматическая система:<br>
-                    • Клиент заполняет форму → данные в n8n → AI генерирует персонализированное письмо → письмо отправляется<br>
-                    • Менеджер получает мгновенное уведомление на почту<br>
-                    • Все заявки автоматически сохраняются в Google Sheets<br>
-                    • <strong>Время обработки сокращено с 15 минут до 30 секунд</strong>
-                </div>
-
-                <!-- БЛОК С ТЕСТОВОЙ ФОРМОЙ -->
-                <div style="background: #f0fdf4; border: 2px solid #22c55e; border-radius: 12px; padding: 20px; margin: 25px 0; text-align: center;">
-                    <div style="font-size: 2em; margin-bottom: 10px;">🎯</div>
-                    <h4 style="margin: 0 0 10px 0; color: #166534;">Хотите увидеть, как это работает?</h4>
-                    <p style="margin-bottom: 15px;">Перейдите по ссылке и заполните тестовую форму. Через 1-2 минуты вы получите письмо, сгенерированное искусственным интеллектом.</p>
-                    <a href="https://a48595.webask.io/911d3d1d0" target="_blank" class="button" style="background: #22c55e; font-size: 1.1em;">🔗 Протестировать автоматизацию</a>
-                    <p style="font-size: 0.85em; color: #666; margin-top: 12px;">✨ Данные никуда не сохраняются. Это только демонстрация.</p>
-                </div>
-
-                 <!-- СКРИНШОТЫ -->
-                <h4 style="margin: 25px 0 15px 0;">📸 Как это работает:</h4>
-                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="images/workflow.png" alt="Схема workflow в n8n" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">1. Схема автоматизации в n8n</p>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="images/email_klient.png" alt="Письмо клиенту" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">2. Письмо, которое получает клиент</p>
-                    </div>
-                </div>
-                <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-top: 20px;">
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="images/email_menager.png" alt="Уведомление менеджера" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">3. Уведомление, которое получает менеджер</p>
-                    </div>
-                    <div style="flex: 1; min-width: 200px;">
-                        <img src="images/sheets.png" alt="Google Sheets" style="width: 100%; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                        <p style="text-align: center; font-size: 0.85em; margin-top: 8px;">4. Логирование в Google Sheets</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>🛠️ Инструменты и технологии</h2>
-            <div class="tech" style="margin-top: 15px;">
-                <span>n8n</span>
-                <span>Make (Integromat)</span>
-                <span>OpenRouter / ChatGPT API</span>
-                <span>Telegram Bot API</span>
-                <span>Gmail API</span>
-                <span>Google Sheets API</span>
-                <span>Webhook</span>
-                <span>RSS</span>
-                <span>WebAsk</span>
-                <span>Git & GitHub</span>
-            </div>
-        </div>
-<div style="text-align: center; margin: 40px 0;">
-    <p style="font-size: 1.2em;">Готов автоматизировать ваш бизнес. Давайте обсудим ваш проект.</p>
-    <a href="mailto:lakeevalex05@gmail.com" class="button" style="background: #22c55e; margin-top: 15px;">📩 Написать мне на почту</a>
-</div>
-        <div class="section">
-            <h2>📫 Контакты</h2>
-            <p>Готов обсудить ваш проект. Свяжитесь со мной любым удобным способом:</p>
-            <div class="contact-links">
-                <a href="mailto:lakeevalex05@gmail.com">✉️ Email</a>
-                <a href="https://github.com/SpaceLakeeAutomation" target="_blank">💼 GitHub</a>
-            </div>
-        </div>
-
-        <footer>
-            <p>© 2026 Александр — Автоматизация на n8n</p>
-            <p style="font-size: 0.85em; margin-top: 10px;">Портфолио создано с помощью GitHub Pages. Новые проекты будут добавляться сюда по мере выполнения.</p>
-        </footer>
+<!-- ── NAVBAR ── -->
+<nav id="navbar">
+    <div class="nav-inner">
+        <span class="nav-logo">АЛ · n8n</span>
+        <ul class="nav-links">
+            <li><a href="#about">Обо мне</a></li>
+            <li><a href="#projects">Проекты</a></li>
+            <li><a href="#stack">Технологии</a></li>
+            <li><a href="#contact">Контакты</a></li>
+        </ul>
     </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Доступен для новых проектов
+            </div>
+            <h1>
+                Привет, я<br>
+                <span class="gradient-text">Александр</span>
+            </h1>
+            <p class="hero-desc">
+                Автоматизирую бизнес-процессы на n8n. Превращаю рутину в системы, которые работают 24/7 без участия человека — с помощью AI, API и интеграций.
+            </p>
+            <div class="hero-cta">
+                <a href="#projects" class="btn-primary">🚀 Смотреть проекты</a>
+                <a href="mailto:lakeevalex05@gmail.com" class="btn-outline">✉️ Написать мне</a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="num">30с</div>
+                    <div class="label">вместо 15 минут</div>
+                </div>
+                <div class="stat">
+                    <div class="num">24/7</div>
+                    <div class="label">работа без человека</div>
+                </div>
+                <div class="stat">
+                    <div class="num">n8n</div>
+                    <div class="label">главный инструмент</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section id="about">
+    <div class="container">
+        <div class="reveal">
+            <span class="label-tag">Обо мне</span>
+            <h2 class="section-title">Превращаю рутину<br>в автоматику</h2>
+            <p class="section-sub">Специалист по автоматизации с фокусом на n8n и AI-интеграции. Сначала разбираюсь в бизнес-процессе — потом строю систему.</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-card reveal reveal-d1">
+                <span class="about-icon">🎯</span>
+                <h3>Мой подход</h3>
+                <p>Сначала понять бизнес-процесс клиента, затем предложить оптимальное решение. Никакой избыточной сложности — только то, что работает и реально экономит время и деньги.</p>
+            </div>
+            <div class="about-card reveal reveal-d2">
+                <span class="about-icon">🤖</span>
+                <h3>AI + автоматизация</h3>
+                <p>Использую OpenRouter, ChatGPT и другие AI-инструменты для генерации контента, классификации задач и принятия решений внутри автоматических пайплайнов.</p>
+            </div>
+            <div class="about-card reveal reveal-d3">
+                <span class="about-icon">🔗</span>
+                <h3>Интеграции без границ</h3>
+                <p>Связываю Telegram, Gmail, Google Sheets, Webhook, RSS и другие сервисы в бесшовные автоматические цепочки, которые работают сами.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── PROJECTS ── -->
+<section id="projects">
+    <div class="container">
+        <div class="reveal">
+            <span class="label-tag">Проекты</span>
+            <h2 class="section-title">Реальные кейсы<br>с измеримым результатом</h2>
+            <p class="section-sub">Новые проекты добавляются по мере выполнения.</p>
+        </div>
+
+        <div class="project-card reveal">
+            <div class="project-header">
+                <div class="project-num">Проект 01</div>
+                <h3>📋 Автоматизация обработки заявок на аренду</h3>
+            </div>
+            <div class="project-body">
+                <div class="tag-row">
+                    <span class="tag">n8n</span>
+                    <span class="tag">WebAsk</span>
+                    <span class="tag">OpenRouter · Mistral</span>
+                    <span class="tag">Gmail API</span>
+                    <span class="tag">Google Sheets</span>
+                </div>
+
+                <p class="task-text">
+                    <strong>Задача:</strong> Компания «Ритейл Логистик» вручную обрабатывала заявки на аренду помещений. На каждую заявку тратили ~15 минут рабочего времени менеджера.
+                </p>
+
+                <div class="result-block">
+                    <div class="result-heading">
+                        <span>📊</span> Результат
+                    </div>
+                    <ul class="result-list">
+                        <li>Клиент заполняет форму → данные в n8n → AI генерирует персонализированное письмо → письмо отправляется автоматически</li>
+                        <li>Менеджер получает мгновенное уведомление на почту</li>
+                        <li>Все заявки автоматически сохраняются в Google Sheets</li>
+                    </ul>
+                    <div class="result-highlight">
+                        ⚡ Время обработки сокращено с 15 минут до 30 секунд
+                    </div>
+                </div>
+
+                <div class="demo-block">
+                    <span class="demo-emoji">🎯</span>
+                    <h4>Хотите увидеть, как это работает?</h4>
+                    <p>Заполните тестовую форму и через 1–2 минуты получите письмо, сгенерированное искусственным интеллектом.</p>
+                    <a href="https://a48595.webask.io/911d3d1d0" target="_blank" class="btn-demo">🔗 Протестировать автоматизацию</a>
+                    <p class="demo-note">✨ Данные никуда не сохраняются. Это только демонстрация.</p>
+                </div>
+
+                <p class="screenshots-label">📸 Как это работает</p>
+                <div class="screenshots-grid">
+                    <div class="screenshot-item">
+                        <img src="images/workflow.png" alt="Схема workflow в n8n">
+                        <div class="screenshot-caption">1. Схема автоматизации в n8n</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/email_klient.png" alt="Письмо клиенту">
+                        <div class="screenshot-caption">2. Письмо, которое получает клиент</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/email_menager.png" alt="Уведомление менеджера">
+                        <div class="screenshot-caption">3. Уведомление для менеджера</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/sheets.png" alt="Google Sheets">
+                        <div class="screenshot-caption">4. Логирование в Google Sheets</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── TECH STACK ── -->
+<section id="stack">
+    <div class="container">
+        <div class="reveal">
+            <span class="label-tag">Технологии</span>
+            <h2 class="section-title">Инструменты</h2>
+            <p class="section-sub">Современный стек для автоматизации любого масштаба.</p>
+        </div>
+        <div class="tech-grid reveal">
+            <div class="tech-item">⚡ n8n</div>
+            <div class="tech-item">🔧 Make</div>
+            <div class="tech-item">🤖 OpenRouter</div>
+            <div class="tech-item">💬 ChatGPT API</div>
+            <div class="tech-item">✈️ Telegram Bot</div>
+            <div class="tech-item">📧 Gmail API</div>
+            <div class="tech-item">📊 Google Sheets</div>
+            <div class="tech-item">🪝 Webhook</div>
+            <div class="tech-item">📡 RSS</div>
+            <div class="tech-item">📝 WebAsk</div>
+            <div class="tech-item">🐙 Git & GitHub</div>
+        </div>
+    </div>
+</section>
+
+<!-- ── CTA ── -->
+<section>
+    <div class="container">
+        <div class="cta-box reveal">
+            <h2>Готов автоматизировать<br>ваш бизнес</h2>
+            <p>Давайте обсудим ваш проект и найдём задачи, которые можно сделать быстрее и дешевле.</p>
+            <a href="mailto:lakeevalex05@gmail.com" class="btn-cta">📩 Написать мне на почту</a>
+        </div>
+    </div>
+</section>
+
+<!-- ── CONTACTS ── -->
+<section id="contact" style="padding-top: 0;">
+    <div class="container">
+        <div class="reveal">
+            <span class="label-tag">Контакты</span>
+            <h2 class="section-title">Связаться со мной</h2>
+        </div>
+        <div class="contact-cards reveal">
+            <a href="mailto:lakeevalex05@gmail.com" class="contact-card">
+                <span class="c-icon">✉️</span>
+                <div>
+                    <div class="c-title">Email</div>
+                    <div class="c-sub">lakeevalex05@gmail.com</div>
+                </div>
+            </a>
+            <a href="https://github.com/SpaceLakeeAutomation" target="_blank" class="contact-card">
+                <span class="c-icon">💼</span>
+                <div>
+                    <div class="c-title">GitHub</div>
+                    <div class="c-sub">SpaceLakeeAutomation</div>
+                </div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+    <div class="container">
+        <p>© 2026 Александр — Автоматизация на n8n</p>
+        <p>Портфолио создано с помощью GitHub Pages. Новые проекты добавляются по мере выполнения.</p>
+    </div>
+</footer>
+
+<script>
+    // Navbar scroll blur
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+        navbar.classList.toggle('scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    // Scroll-reveal via IntersectionObserver
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1 });
+    reveals.forEach(el => observer.observe(el));
+</script>
 </body>
 </html>
